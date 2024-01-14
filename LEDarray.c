@@ -9,13 +9,18 @@ void LEDarray_init(void)
 {
     LATA = 0; //set initial output LAT values (they may have random values when powered on)
     LATB = 0; //initialise LAT before TRIS
-    LATF = 0;
+    LATFbits.LATF0 = 0;
+    LATFbits.LATF6 = 0;
     LATG = 0;
 	
     TRISA = 0; //set up TRIS registers for pins connected to LED array
 	TRISB = 0;
-    TRISF = 0;
+    TRISFbits.TRISF0 = 0;
+    TRISFbits.TRISF6 = 0;
     TRISG = 0;
+    
+    TRISFbits.TRISF2=1; //set TRIS value for pin (input)
+    ANSELFbits.ANSELF2=0; //turn off analogue input on pin    
 }
 
 /************************************
@@ -44,6 +49,8 @@ void LEDarray_disp_bin(unsigned int number)
 void LEDarray_disp_dec(unsigned int number)
 {
 	unsigned int disp_val;
+    
+    disp_val = number*10;
 	
 	//some code to manipulate the variable number into the correct
 	//format and store in disp_val for display on the LED array
@@ -68,3 +75,17 @@ void LEDarray_disp_PPM(unsigned int cur_val, unsigned int max)
 	LEDarray_disp_bin(disp_val);	//display value on LED array
 }
 
+void Button_init(void){
+    TRISFbits.TRISF2=1; //set TRIS value for pin (input)
+    ANSELFbits.ANSELF2=0; //turn off analogue input on pin 
+}
+
+int Input_Button(void)
+{
+    if (PORTFbits.RF2){
+        return 0;
+    }
+    else {
+        return 1;
+    }
+}
