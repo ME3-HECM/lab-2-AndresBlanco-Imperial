@@ -7,8 +7,15 @@
 ************************************/
 void LEDarray_init(void)
 {
-    	//set up TRIS registers for pins connected to LED array
-	//set initial output LAT values (they may have random values when powered on)
+    LATA = 0; //set initial output LAT values (they may have random values when powered on)
+    LATB = 0; //initialise LAT before TRIS
+    LATF = 0;
+    LATG = 0;
+	
+    TRISA = 0; //set up TRIS registers for pins connected to LED array
+	TRISB = 0;
+    TRISF = 0;
+    TRISG = 0;
 }
 
 /************************************
@@ -17,9 +24,16 @@ void LEDarray_init(void)
 ************************************/
 void LEDarray_disp_bin(unsigned int number)
 {
-	//some code to turn on/off the pins connected to the LED array
-	//if statements and bit masks can be used to determine if a particular pin should be on/off
-	//see Readme.md for examples
+    //some code to turn on/off the pins connected to the LED array
+	if (number & 0b00000001)        {LATGbits.LATG0 = 1;} else {LATGbits.LATG0 = 0;} //test bit 0 against bit mask and set LED
+    if (number & (0b00000001 << 1)) {LATGbits.LATG1 = 1;} else {LATGbits.LATG1 = 0;} //test bit 1
+    if (number & (0b00000001 << 2)) {LATAbits.LATA2 = 1;} else {LATAbits.LATA2 = 0;} //...
+    if (number & (0b00000001 << 3)) {LATFbits.LATF6 = 1;} else {LATFbits.LATF6 = 0;}
+    if (number & (0b00000001 << 4)) {LATAbits.LATA4 = 1;} else {LATAbits.LATA4 = 0;}
+    if (number & (0b00000001 << 5)) {LATAbits.LATA5 = 1;} else {LATAbits.LATA5 = 0;}
+    if (number & (0b00000001 << 6)) {LATFbits.LATF0 = 1;} else {LATFbits.LATF0 = 0;}
+    if (number & (0b00000001 << 7)) {LATBbits.LATB0 = 1;} else {LATBbits.LATB0 = 0;}
+    if (number & (0b00000001 << 8)) {LATBbits.LATB1 = 1;} else {LATBbits.LATB1 = 0;} //test bit 8
 }
 
 /************************************
