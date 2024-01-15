@@ -74,12 +74,18 @@ void LEDarray_disp_PPM(unsigned int cur_val, unsigned int max)
 
 	LEDarray_disp_bin(disp_val);	//display value on LED array
 }
-
+/************************************
+/ Button_init
+/ Function used to initialize button press bits
+************************************/
 void Button_init(void){
     TRISFbits.TRISF2=1; //set TRIS value for pin (input)
     ANSELFbits.ANSELF2=0; //turn off analogue input on pin 
 }
-
+/************************************
+/ Input_Button
+/ Function used to return a 1 or 0 depending on button press
+************************************/
 int Input_Button(void)
 {
     if (PORTFbits.RF2){
@@ -88,4 +94,34 @@ int Input_Button(void)
     else {
         return 1;
     }
+}
+/************************************
+/ LED_Light_Meter
+/ Function used to create a scale for the LED array
+/ Ambient light is 511 (LED array full) 
+/ Thumb over the LDR is 0 (LED array empty) 
+************************************/
+unsigned int LED_Light_Meter(unsigned int max_light, unsigned int min_light, unsigned int light_value){
+    unsigned int LED_value;
+    unsigned int resolution;
+    unsigned int num;
+    //create ratio between max light and min light to get how much each step is in terms of value
+    resolution = (max_light-min_light)/9;
+
+    LED_value = 0;    
+    
+    if (light_value>max_light){
+        LED_value = 511;
+    }
+    else{
+        num = 0;
+        while(num<=9){
+            if (resolution*num < ((light_value-min_light)/max_light)){
+            LED_value<<=num;
+            LED_value += 1; 
+           }
+        }
+    } 
+    
+    return LED_value;
 }

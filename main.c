@@ -10,13 +10,19 @@
 
 void main(void) 
 {
-    unsigned int value;
+    unsigned int light_value;
+    unsigned int meter_value;
+    unsigned int max_light;
+    unsigned int min_light;
     
     LEDarray_init();
     ADC_init();
     
+    max_light = 320; //light value at ambient conditions
+    min_light = 128; //light value when thumb is above LDR
     while (1) {
-        value = ADC_getval(); //get value from light dependant resistor
-        LEDarray_disp_bin(value);   
+        light_value = ADC_getval(); //get value from light dependant resistor
+        meter_value = LED_Light_Meter(max_light, min_light, light_value); //get value for continuous meter from binary values
+        LEDarray_disp_bin(meter_value);   
     }
 }
