@@ -3,6 +3,7 @@
 #pragma config WDTE = OFF        // WDT operating mode (WDT enabled regardless of sleep)
 
 #include <xc.h>
+
 #include "LEDarray.h"
 #include "ADC.h"
 
@@ -23,6 +24,6 @@ void main(void)
     while (1) {
         light_value = ADC_getval(); //get value from light dependant resistor
         meter_value = LED_Light_Meter(max_light, min_light, light_value); //get value for continuous meter from binary values
-        LEDarray_disp_bin(meter_value);   
+        LEDarray_disp_bin(meter_value);   //output the value to the LED array
     }
 }

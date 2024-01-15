@@ -1,4 +1,5 @@
 #include <xc.h>
+#include <math.h>
 #include "LEDarray.h"
 
 /************************************
@@ -106,7 +107,7 @@ unsigned int LED_Light_Meter(unsigned int max_light, unsigned int min_light, uns
     unsigned int resolution;
     unsigned int num;
     //create ratio between max light and min light to get how much each step is in terms of value
-    resolution = (max_light-min_light)/9;
+    resolution = round((max_light-min_light)/9);
 
     LED_value = 0;    
     
@@ -117,8 +118,9 @@ unsigned int LED_Light_Meter(unsigned int max_light, unsigned int min_light, uns
         num = 0;
         while(num<=9){
             if (resolution*num < ((light_value-min_light)/max_light)){
-            LED_value<<=num;
+            LED_value <<= num;
             LED_value += 1; 
+            num++;
            }
         }
     } 
