@@ -17,6 +17,6 @@ void main(void)
     
     while (1) {
         value = ADC_getval(); //get value from light dependant resistor
-        LEDarray_disp_bin(value);         	
+        LEDarray_disp_bin(value);   
     }
 }
