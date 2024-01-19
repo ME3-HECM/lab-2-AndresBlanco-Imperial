@@ -18,18 +18,21 @@ void main(void)
     unsigned int min_light = 50; //light value when thumb is above LDR
     unsigned int max_ppm;
     
+    //Initialise the LED array and LDR ports
     LEDarray_init();
     ADC_init();
     
 
     while (1) {
-        light_value = ADC_getval(); //get value from light dependant resistor
+        //get value from light dependant resistor
+        light_value = ADC_getval(); 
         
          //get value for continuous meter from binary values
         meter_value = LED_Light_Meter(max_light, min_light, light_value);       
         
         //find current peak hold
         max_ppm = calc_max_PPM(meter_value, max_ppm);
+        
         // Display combined peak hold and light value
         LEDarray_disp_PPM(meter_value, max_ppm);
         

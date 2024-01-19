@@ -33,32 +33,14 @@ void LEDarray_disp_bin(unsigned int number)
     //some code to turn on/off the pins connected to the LED array
 	if (number & 1)        {LATGbits.LATG0 = 1;} else {LATGbits.LATG0 = 0;} //test bit 0 against bit mask and set LED
     if (number & (1 << 1)) {LATGbits.LATG1 = 1;} else {LATGbits.LATG1 = 0;} //test bit 1
-    if (number & (1 << 2)) {LATAbits.LATA2 = 1;} else {LATAbits.LATA2 = 0;} //...
-    if (number & (1 << 3)) {LATFbits.LATF6 = 1;} else {LATFbits.LATF6 = 0;}
+    if (number & (1 << 2)) {LATAbits.LATA2 = 1;} else {LATAbits.LATA2 = 0;} //test bit 2
+    if (number & (1 << 3)) {LATFbits.LATF6 = 1;} else {LATFbits.LATF6 = 0;} //...
     if (number & (1 << 4)) {LATAbits.LATA4 = 1;} else {LATAbits.LATA4 = 0;}
     if (number & (1 << 5)) {LATAbits.LATA5 = 1;} else {LATAbits.LATA5 = 0;}
     if (number & (1 << 6)) {LATFbits.LATF0 = 1;} else {LATFbits.LATF0 = 0;}
     if (number & (1 << 7)) {LATBbits.LATB0 = 1;} else {LATBbits.LATB0 = 0;}
     if (number & (1 << 8)) {LATBbits.LATB1 = 1;} else {LATBbits.LATB1 = 0;} //test bit 8
 }
-
-/************************************
-/ Function LEDarray_disp_dec
-/ Used to display a number on the LEDs
-/ where each LED is a value of 10
-************************************/
-void LEDarray_disp_dec(unsigned int number)
-{
-	unsigned int disp_val;
-    
-    disp_val = number*10;
-	
-	//some code to manipulate the variable number into the correct
-	//format and store in disp_val for display on the LED array
-
-	LEDarray_disp_bin(disp_val); 	//display value on LED array
-}
-
 
 /************************************
 / LEDarray_PPM
@@ -73,8 +55,9 @@ void LEDarray_disp_PPM(unsigned int cur_val, unsigned int max_ppm)
     //output the value to the LED array
     LEDarray_disp_bin(cur_val);
 }
+
 /************************************
-/ Calc_max_PPM
+/ calc_max_PPM
 / Function used to calculate the peak hold
 / cur_val is the current level from the most recent sample, and max_ppm is the peak value for the last second
 ************************************/
@@ -95,34 +78,14 @@ unsigned int calc_max_PPM(unsigned int cur_val, unsigned int max_ppm) {
         // Increment loop counter and check if threshold is reached
         loopCounter++;
         if (loopCounter >= threshold) {
-            max_ppm >>= 1; // Halve the max_ppm value
+            max_ppm >>= 1; // Shift max_ppm value by one
             loopCounter = 0; // Reset loop counter
         }
     }
 
     return max_ppm;
 }
-/************************************
-/ Button_init
-/ Function used to initialize button press bits
-************************************/
-void Button_init(void){
-    TRISFbits.TRISF2=1; //set TRIS value for pin (input)
-    ANSELFbits.ANSELF2=0; //turn off analogue input on pin 
-}
-/************************************
-/ Input_Button
-/ Function used to return a 1 or 0 depending on button press
-************************************/
-int Input_Button(void)
-{
-    if (PORTFbits.RF2){
-        return 0;
-    }
-    else {
-        return 1;
-    }
-}
+
 /************************************
 / LED_Light_Meter
 / Function used to create a scale for the LED array
@@ -150,6 +113,7 @@ unsigned int LED_Light_Meter(unsigned int max_light, unsigned int min_light, uns
     }
     return LED_value;
 }
+
 /************************************
 / highestBit
 / Function used find the most significant bit (MSB) in a binary number
