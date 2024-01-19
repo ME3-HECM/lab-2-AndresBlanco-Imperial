@@ -15,7 +15,7 @@ void main(void)
     unsigned int light_value;
     unsigned int meter_value;
     unsigned int max_light = 169; //light value at ambient conditions
-    unsigned int min_light = 50; //light value when thumb is above LDR
+    unsigned int min_light = 70; //light value when thumb is above LDR
     unsigned int max_ppm;
     
     //Initialise the LED array and LDR ports

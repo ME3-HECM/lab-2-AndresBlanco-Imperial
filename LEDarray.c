@@ -1,5 +1,4 @@
 #include <xc.h>
-#include <math.h>
 #include "LEDarray.h"
 
 /************************************
@@ -63,7 +62,7 @@ void LEDarray_disp_PPM(unsigned int cur_val, unsigned int max_ppm)
 ************************************/
 unsigned int calc_max_PPM(unsigned int cur_val, unsigned int max_ppm) {
     static unsigned long loopCounter = 0;
-    const unsigned long threshold = 1000; // Adjust this based on your loop speed
+    const unsigned long threshold = 3000; // Adjust this based on your loop speed
 
     // Update max_ppm if cur_val is greater
     if (cur_val > max_ppm) {
@@ -98,7 +97,7 @@ unsigned int LED_Light_Meter(unsigned int max_light, unsigned int min_light, uns
     unsigned int step;
 
     /// Calculate resolution using floating-point division and then convert to integer
-    resolution = round((float)(max_light - min_light) / 9.0);
+    resolution = ((max_light - min_light) / 9);
 
     // All LEDs on if light_value is above or equal to the maximum value
     if (light_value >= max_light) {
