@@ -62,7 +62,7 @@ void LEDarray_disp_PPM(unsigned int cur_val, unsigned int max_ppm)
 ************************************/
 unsigned int calc_max_PPM(unsigned int cur_val, unsigned int max_ppm) {
     static unsigned long loopCounter = 0;
-    const unsigned long threshold = 3000; // Adjust this based on your loop speed
+    const unsigned long threshold = 10000; // Adjust this based on your loop speed
 
     // Update max_ppm if cur_val is greater
     if (cur_val > max_ppm) {
@@ -79,6 +79,7 @@ unsigned int calc_max_PPM(unsigned int cur_val, unsigned int max_ppm) {
         if (loopCounter >= threshold) {
             max_ppm >>= 1; // Shift max_ppm value by one
             loopCounter = 0; // Reset loop counter
+            __delay_ms(100); //Implement the delay for the loop speed
         }
     }
 
