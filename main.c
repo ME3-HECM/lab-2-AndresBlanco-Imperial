@@ -3,19 +3,39 @@
 #pragma config WDTE = OFF        // WDT operating mode (WDT enabled regardless of sleep)
 
 #include <xc.h>
+
 #include "LEDarray.h"
+#include "ADC.h"
+
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
 void main(void) 
 {
-	unsigned int count=0;
+    unsigned int light_value;
+    unsigned int meter_value;
+    unsigned int max_light = 150; //light value at ambient conditions
+    unsigned int min_light = 70; //light value when thumb is above LDR
+    unsigned int max_ppm;
+    
+    //Initialise the LED array and LDR ports
     LEDarray_init();
-  
+    ADC_init();
+    
+
     while (1) {
-		count++; // increment count
-		if (count>511) {count=0;} //reset a when it gets too big
-		LEDarray_disp_bin(count); //output a on the LED array in binary
-		__delay_ms(50); // Delay so human eye can see change
+        //get value from light dependant resistor
+        light_value = ADC_getval(); 
+        
+         //get value for continuous meter from binary values
+        meter_value = LED_Light_Meter(max_light, min_light, light_value);       
+        
+        //find current peak hold
+        max_ppm = calc_max_PPM(meter_value, max_ppm);
+        
+        // Display combined peak hold and light value
+        LEDarray_disp_PPM(meter_value, max_ppm);
+        
+        
     }
 }
